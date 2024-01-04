@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Role Enum
+enum Role {
+  ADMIN
+  USER
+}
+
+// Contact Model
+model Contact {
+  id        String   @id @default(uuid())
+  phone     String
+  email     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  School    School[]
+}
+
+// Domain Model
+model Domain {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  domain    String
+  slug      String
+  school    School   @relation(fields: [schoolId], references: [id])
+  schoolId  String   @unique
+}
+
+// School Model
+model School {
+  id              String   @id @default(uuid())
+  name            String
+  location        String
+  logoUrl         String
+  establishedDate DateTime
+  contact         Contact  @relation(fields: [contactId], references: [id])
+  contactId       String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  users           User[]
+  domain          Domain?
+}
+
+// User Model
+model User {
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  password   String
+  role       Role     @default(USER)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  lastLogin  DateTime @default(now())
+  school     School?  @relation(fields: [schoolId], references: [id]) // TODO: Make this required
+  schoolId   String? // TODO: Make this required
+  Profile    Profile?
+  signUpDate DateTime @default(now())
+}
+
+// Profile Model
+model Profile {
+  id            String   @id @default(uuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String   @unique
+  bio           String?
+  emailVerified Boolean  @default(false)
+  username      String   @unique
+}
