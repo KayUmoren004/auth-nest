@@ -34,7 +34,12 @@ export class UserService {
     return await this.prisma.user.findUnique({
       where: { email },
       include: {
-        school: true,
+        school: {
+          include: {
+            domain: true,
+            contact: true,
+          },
+        },
       },
     });
   }
@@ -44,7 +49,12 @@ export class UserService {
     return await this.prisma.user.findUnique({
       where: { id },
       include: {
-        school: true,
+        school: {
+          include: {
+            domain: true,
+            contact: true,
+          },
+        },
       },
     });
   }

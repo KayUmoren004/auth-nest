@@ -5,7 +5,7 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { UUID } from 'crypto';
+
 import { UserService } from './user.service';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
 

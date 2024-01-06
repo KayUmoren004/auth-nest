@@ -4,6 +4,8 @@ import { UserService } from 'src/user/user.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
+const EXPIRE_TIME = 1000 * 60 * 60;
+
 @Injectable()
 export class AuthService {
   // Constructor
@@ -38,6 +40,7 @@ export class AuthService {
           expiresIn: '7d',
           secret: process.env.JWT_REFRESH_TOKEN_KEY,
         }),
+        expiresIn: new Date().setTime(new Date().getTime() + EXPIRE_TIME),
       },
     };
   }
@@ -77,6 +80,7 @@ export class AuthService {
         expiresIn: '7d',
         secret: process.env.JWT_REFRESH_TOKEN_KEY,
       }),
+      expiresIn: new Date().setTime(new Date().getTime() + EXPIRE_TIME),
     };
   }
 }
