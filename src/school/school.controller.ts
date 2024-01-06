@@ -1,6 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { SchoolService } from './school.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('School')
 @Controller('school')
 export class SchoolController {
   // Constructor

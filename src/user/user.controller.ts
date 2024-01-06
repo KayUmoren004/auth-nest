@@ -8,7 +8,9 @@ import {
 
 import { UserService } from './user.service';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @Controller('user')
 export class UserController {
   // Constructor
