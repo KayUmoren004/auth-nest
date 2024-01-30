@@ -15,4 +15,35 @@ export class SchoolService {
       },
     });
   }
+
+  // Find a school by domain
+  async findIdByDomain(domain: string) {
+    const school = await this.prisma.school.findFirst({
+      where: { domain: { domain } },
+    });
+
+    return school.id;
+  }
+
+  // Get Users in a school
+  async getUsers(schoolId: string) {
+    const users = await this.prisma.school
+      .findUnique({
+        where: {
+          id: schoolId,
+        },
+      })
+      .users({
+        include: {
+          profile: true,
+        },
+      });
+
+    // Delete password from users
+    users.forEach((user) => {
+      delete user.password;
+    });
+
+    return users;
+  }
 }

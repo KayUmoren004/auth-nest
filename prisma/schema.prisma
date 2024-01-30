@@ -16,6 +16,32 @@ enum Role {
   USER
 }
 
+// Season Enum
+enum Season {
+  FALL
+  WINTER
+  SPRING
+  SUMMER
+}
+
+// Division Enum
+enum Division {
+  VARSITY
+  JV
+  FRESHMAN
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  OPEN
+}
+
+// Winner Enum
+enum Winner {
+  HOME
+  AWAY
+  TIE
+}
+
 // Contact Model
 model Contact {
   id        String   @id @default(uuid())
@@ -50,6 +76,7 @@ model School {
   updatedAt       DateTime @updatedAt
   users           User[]
   domain          Domain?
+  sports          Sport[]
 }
 
 // User Model
@@ -58,14 +85,17 @@ model User {
   name       String
   email      String   @unique
   password   String
-  role       Role     @default(USER)
+  // role       Role     @default(USER)
+  role       String   @default("USER")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   lastLogin  DateTime @default(now())
   school     School?  @relation(fields: [schoolId], references: [id]) // TODO: Make this required
   schoolId   String? // TODO: Make this required
-  Profile    Profile?
+  profile    Profile?
+  player     Player[]
   signUpDate DateTime @default(now())
+  captain    Team[]
 }
 
 // Profile Model
@@ -78,4 +108,110 @@ model Profile {
   bio           String?
   emailVerified Boolean  @default(false)
   username      String   @unique
+}
+
+// Sport Model
+model Sport {
+  id          String          @id @default(uuid())
+  schoolId    String
+  School      School          @relation(fields: [schoolId], references: [id])
+  name        String          @unique
+  season      String
+  description String
+  rulesUrl    String
+  leagues     League[]
+  status      String          @default("Active")
+  settings    SportSettings[]
+}
+
+// Sport Settings Model
+model SportSettings {
+  id       Int     @id @default(autoincrement())
+  sportId  String
+  sport    Sport   @relation(fields: [sportId], references: [id])
+  name     String
+  value    String
+  required Boolean
+}
+
+// League Model
+model League {
+  id        String           @id @default(uuid())
+  sportId   String
+  sport     Sport?           @relation(fields: [sportId], references: [id])
+  name      String           @unique
+  division  String
+  startDate DateTime
+  endDate   DateTime
+  teams     Team[]
+  settings  LeagueSettings[]
+}
+
+// league settings model
+model LeagueSettings {
+  id       Int     @id @default(autoincrement())
+  leagueId String
+  league   League  @relation(fields: [leagueId], references: [id])
+  name     String  @unique
+  value    Json
+  required Boolean
+}
+
+// Team Model
+model Team {
+  id        String         @id @default(uuid())
+  leagueId  String?
+  league    League?        @relation(fields: [leagueId], references: [id])
+  name      String         @unique
+  captainId String?
+  captain   User?          @relation(fields: [captainId], references: [id])
+  logoUrl   String
+  wins      Int?           @default(0)
+  losses    Int?           @default(0)
+  ties      Int?           @default(0)
+  players   Player[]
+  games     Game[]
+  settings  TeamSettings[]
+}
+
+// Team Settings Model
+model TeamSettings {
+  id       Int     @id @default(autoincrement())
+  teamId   String
+  team     Team    @relation(fields: [teamId], references: [id])
+  name     String
+  value    String
+  required Boolean
+}
+
+// Player Model
+model Player {
+  id           String @id @default(uuid())
+  teamId       String
+  Team         Team   @relation(fields: [teamId], references: [id])
+  userId       String
+  user         User   @relation(fields: [userId], references: [id])
+  position     String
+  jerseyNumber Int
+  //Stats
+}
+
+// Game Model
+model Game {
+  id       String         @id @default(uuid())
+  homeId   String
+  awayId   String
+  teamId   String?
+  teams    Team[]
+  settings GameSettings[]
+}
+
+// Game Settings Model
+model GameSettings {
+  id       Int     @id @default(autoincrement())
+  gameId   String
+  game     Game    @relation(fields: [gameId], references: [id])
+  name     String
+  value    String
+  required Boolean
 }

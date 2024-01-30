@@ -2,10 +2,14 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateUserDto } from './dto/user.dto';
 import { hash } from 'bcrypt';
+import { SchoolService } from 'src/school/school.service';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private schoolService: SchoolService,
+  ) {}
 
   // Create a new user
   async create(dto: CreateUserDto) {
@@ -17,9 +21,16 @@ export class UserService {
     // If user exists, throw an error
     if (user) throw new ConflictException('Email already exists');
 
+    // Extract the school domain from the dto
+    const { schoolDomain, ...userData } = dto;
+
+    const schoolId = await this.schoolService.findIdByDomain(schoolDomain);
+
+    const actualUser = { schoolId, ...userData };
+
     // Create the user
     const newUser = await this.prisma.user.create({
-      data: { ...dto, password: await hash(dto.password, 10) },
+      data: { ...actualUser, password: await hash(dto.password, 10) },
     });
 
     // Exclude the password from the response

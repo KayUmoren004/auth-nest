@@ -8,8 +8,22 @@ import { PrismaService } from './prisma.service';
 import { SchoolService } from './school/school.service';
 import { SchoolModule } from './school/school.module';
 
+import { LeagueModule } from './league/league.module';
+import { SportModule } from './sport/sport.module';
+import { GameModule } from './game/game.module';
+import { TeamModule } from './team/team.module';
+
 @Module({
-  imports: [ConfigModule.forRoot(), UserModule, AuthModule, SchoolModule],
+  imports: [
+    ConfigModule.forRoot(),
+    UserModule,
+    AuthModule,
+    SchoolModule,
+    LeagueModule,
+    SportModule,
+    GameModule,
+    TeamModule,
+  ],
   controllers: [AppController],
   providers: [AppService, PrismaService, SchoolService],
 })

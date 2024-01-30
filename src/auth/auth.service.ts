@@ -3,6 +3,7 @@ import { LoginDto } from './dto/auth.dto';
 import { UserService } from 'src/user/user.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUserDto } from 'src/user/dto/user.dto';
 
 const EXPIRE_TIME = 1000 * 60 * 60;
 

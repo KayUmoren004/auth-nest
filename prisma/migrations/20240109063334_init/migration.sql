@@ -1,0 +1,21 @@
+-- DropForeignKey
+ALTER TABLE "Team" DROP CONSTRAINT "Team_captainId_fkey";
+
+-- DropForeignKey
+ALTER TABLE "Team" DROP CONSTRAINT "Team_leagueId_fkey";
+
+-- AlterTable
+ALTER TABLE "Team" ALTER COLUMN "leagueId" DROP NOT NULL,
+ALTER COLUMN "captainId" DROP NOT NULL,
+ALTER COLUMN "wins" DROP NOT NULL,
+ALTER COLUMN "wins" SET DEFAULT 0,
+ALTER COLUMN "losses" DROP NOT NULL,
+ALTER COLUMN "losses" SET DEFAULT 0,
+ALTER COLUMN "ties" DROP NOT NULL,
+ALTER COLUMN "ties" SET DEFAULT 0;
+
+-- AddForeignKey
+ALTER TABLE "Team" ADD CONSTRAINT "Team_leagueId_fkey" FOREIGN KEY ("leagueId") REFERENCES "League"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Team" ADD CONSTRAINT "Team_captainId_fkey" FOREIGN KEY ("captainId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
