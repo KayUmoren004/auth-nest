@@ -27,8 +27,13 @@ export class CreateFixtureDto {
   awayId: string;
 
   @IsDate()
+  @Transform(({ value }) => new Date(value))
   @IsNotEmpty()
   date: Date;
+
+  @IsString()
+  @IsNotEmpty()
+  leagueId: string;
 }
 
 export class EditFixtureResultsDto {

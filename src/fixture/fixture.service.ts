@@ -64,8 +64,24 @@ export class FixtureService {
             id: awayTeamType.id,
           },
         },
-        results: null,
         date: dto.date,
+        league: {
+          connect: {
+            id: dto.leagueId,
+          },
+        },
+      },
+    });
+
+    // Add the fixture to the league
+    await this.prisma.league.update({
+      where: { id: dto.leagueId },
+      data: {
+        fixtures: {
+          connect: {
+            id: fixture.id,
+          },
+        },
       },
     });
 
@@ -123,7 +139,7 @@ export class FixtureService {
 
   // Find a fixture by id
   async findFixtureById(id: string) {
-    return await this.prisma.fixtures.findUnique({
+    const fixture = await this.prisma.fixtures.findUnique({
       where: { id },
       include: {
         homeTeam: true,
@@ -131,5 +147,34 @@ export class FixtureService {
         results: true,
       },
     });
+
+    // If fixture does not exist, throw an error
+    if (!fixture) throw new Error('Fixture does not exist');
+
+    // Return the fixture
+    return fixture;
+  }
+
+  // Get All Fixtures in a League
+  async getAllFixturesInLeague(leagueId: string) {
+    const fixtures = await this.prisma.fixtures.findMany({
+      where: { leagueId },
+      include: {
+        homeTeam: {
+          include: {
+            team: true,
+          },
+        },
+        awayTeam: {
+          include: {
+            team: true,
+          },
+        },
+        results: true,
+      },
+    });
+
+    // Return the fixtures
+    return fixtures;
   }
 }

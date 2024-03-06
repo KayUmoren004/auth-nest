@@ -5,7 +5,7 @@ export type School = {
   name: string;
   location: string;
   logoUrl: string;
-  established: Date;
+  establishedDate: Date;
   contact: {
     id: string;
     phone: string;

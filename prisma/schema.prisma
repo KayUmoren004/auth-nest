@@ -49,7 +49,8 @@ model Contact {
   email     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  School    School[]
+  school   School   @relation(fields: [schoolId], references: [id])
+  schoolId String   @unique
 }
 
 // Domain Model
@@ -70,8 +71,7 @@ model School {
   location        String
   logoUrl         String
   establishedDate DateTime
-  contact         Contact  @relation(fields: [contactId], references: [id])
-  contactId       String
+  contact         Contact? 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   users           User[]
@@ -145,6 +145,7 @@ model League {
   endDate   DateTime
   teams     Team[]
   settings  LeagueSettings[]
+  fixtures  Fixtures[]
 }
 
 // league settings model
@@ -255,9 +256,11 @@ model Fixtures {
   id             String       @id @default(uuid())
   homeTeam       HomeTeamType @relation(fields: [homeFixtureId], references: [id])
   awayTeam       AwayTeamType @relation(fields: [awayFixtureId], references: [id])
-  results        Results      @relation(fields: [resultsId], references: [id])
-  resultsId      String
+  results        Results?      @relation(fields: [resultsId], references: [id])
+  resultsId      String?
   homeFixtureId String
   awayFixtureId String
   date           DateTime
+  leagueId       String
+  league         League       @relation(fields: [leagueId], references: [id])
 }

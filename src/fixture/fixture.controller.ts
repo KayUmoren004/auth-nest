@@ -1,8 +1,9 @@
-import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiProperty,
   ApiTags,
 } from '@nestjs/swagger';
 import { FixtureService } from './fixture.service';
@@ -41,5 +42,33 @@ export class FixtureController {
     @Param('fixtureId') fixtureId: string,
   ) {
     return await this.fixtureService.editFixtureResults(dto);
+  }
+
+  // Get Fixture by ID Endpoint - GET /{fixtureId}
+  @UseGuards(JwtGuard)
+  @Get('/:fixtureId')
+  @ApiOkResponse({
+    type: CreateFixtureResponse,
+  })
+  @ApiProperty({
+    type: String,
+    format: 'uuid',
+    description: 'The ID of the fixture',
+  })
+  async getFixtureById(@Param('fixtureId') fixtureId: string) {
+    return await this.fixtureService.findFixtureById(fixtureId);
+  }
+
+  // Get All Fixtures in a League Endpoint - GET /league/{leagueId}
+  @UseGuards(JwtGuard)
+  @Get('/league/:leagueId')
+  @ApiOkResponse()
+  @ApiProperty({
+    type: String,
+    format: 'uuid',
+    description: 'The ID of the league',
+  })
+  async getFixturesByLeagueId(@Param('leagueId') leagueId: string) {
+    return await this.fixtureService.getAllFixturesInLeague(leagueId);
   }
 }
