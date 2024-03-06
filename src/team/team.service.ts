@@ -70,6 +70,21 @@ export class TeamService {
     if (maxLeagueTeams && numberOfTeams >= Number(maxLeagueTeams.value))
       throw new ConflictException('Max number of teams reached');
 
+    // Check if captain exists
+    const captain = await this.prisma.user.findUnique({
+      where: { id: dto.captainId },
+    });
+
+    // If captain does not exist, throw an error
+    if (!captain) throw new ConflictException('Captain does not exist');
+
+    // If captain already has a team, throw an error
+    const captainTeam = await this.prisma.team.findFirst({
+      where: { captainId: dto.captainId },
+    });
+
+    if (captainTeam) throw new ConflictException('Captain already has a team');
+
     // Create the team
     const newTeam = await this.prisma.team.create({
       data: dto,

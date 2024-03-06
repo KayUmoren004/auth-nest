@@ -16,7 +16,7 @@ export type School = {
   };
   createdAt: string;
   updatedAt: string;
-  admins: string[];
+  admins?: string[];
   domain: {
     id: string;
     createdAt: string;
@@ -47,6 +47,7 @@ export type League = {
   startDate: Date;
   endDate: Date;
   sport: Sport;
+  fixtures: Fixture[]; // List of fixtures associated with the league
 };
 
 export type Team = {
@@ -60,6 +61,8 @@ export type Team = {
   ties: number; // Number of draws (relevant for sports like soccer)
   captain: User;
   league: League;
+  fixtures: Fixture[]; // List of fixtures associated with the team
+  // fixturesIds: string[]; // List of fixture IDs associated with the team
 };
 
 export type Player = {
@@ -84,6 +87,70 @@ export type Game = {
     awayScore: number;
     winner: 'Home' | 'Away' | 'Draw';
   };
+  fixtureId: string; // Reference to the fixture
+  fixture: Fixture;
+};
+
+type TeamType = {
+  logo?: string;
+  name: string;
+  teamId: string;
+  type: 'home' | 'away';
+};
+
+// export type Fixture = {
+//   id: string;
+//   homeTeam: TeamType;
+//   awayTeam: TeamType;
+//   date: string;
+//   time: string;
+//   fixtureId?: string;
+//   result?: {
+//     homeScore: number;
+//     awayScore: number;
+//     winner: 'Home' | 'Away' | 'Draw';
+//   };
+// };
+export type HomeTeamType = {
+  id: string;
+  logo: string;
+  name: string;
+  homeTeamId: string;
+  team: Team;
+  type: 'Home';
+  fixtures: Fixture[];
+};
+
+export type AwayTeamType = {
+  id: string;
+  logo: string;
+  name: string;
+  awayTeamId: string;
+  team: Team;
+  type: 'Away';
+  fixtures: Fixture[];
+};
+
+// Result Type
+export type Results = {
+  id: string;
+  homeId: string;
+  awayId: string;
+  winner: 'Home' | 'Away' | 'Draw';
+  homeScore: number;
+  awayScore: number;
+  fixtures: Fixture[];
+};
+
+export type Fixture = {
+  id: string;
+  homeTeam: HomeTeamType;
+  awayTeam: AwayTeamType;
+  results: Results;
+  resultsId: string;
+  homeFixtureId: string;
+  awayFixtureId: string;
+  date: Date;
 };
 
 type DynamicStats = {

@@ -159,19 +159,21 @@ model LeagueSettings {
 
 // Team Model
 model Team {
-  id        String         @id @default(uuid())
-  leagueId  String?
-  league    League?        @relation(fields: [leagueId], references: [id])
-  name      String         @unique
-  captainId String?
-  captain   User?          @relation(fields: [captainId], references: [id])
-  logoUrl   String
-  wins      Int?           @default(0)
-  losses    Int?           @default(0)
-  ties      Int?           @default(0)
-  players   Player[]
-  games     Game[]
-  settings  TeamSettings[]
+  id           String         @id @default(uuid())
+  leagueId     String?
+  league       League?        @relation(fields: [leagueId], references: [id])
+  name         String         @unique
+  captainId    String?
+  captain      User?          @relation(fields: [captainId], references: [id])
+  logoUrl      String
+  wins         Int?           @default(0)
+  losses       Int?           @default(0)
+  ties         Int?           @default(0)
+  players      Player[]
+  games        Game[]
+  settings     TeamSettings[]
+  homeTeamType HomeTeamType?
+  awayTeamType AwayTeamType?
 }
 
 // Team Settings Model
@@ -214,4 +216,48 @@ model GameSettings {
   name     String
   value    String
   required Boolean
+}
+
+// Team Type Model
+model HomeTeamType {
+  id         String     @id @default(uuid())
+  logo       String
+  name       String
+  homeTeamId String     @unique
+  team       Team       @relation(fields: [homeTeamId], references: [id])
+  type       String
+  fixtures   Fixtures[]
+}
+
+model AwayTeamType {
+  id         String     @id @default(uuid())
+  logo       String
+  name       String
+  awayTeamId String     @unique
+  team       Team       @relation(fields: [awayTeamId], references: [id])
+  type       String
+  fixtures   Fixtures[]
+}
+
+// Result Model
+model Results {
+  id        String     @id @default(uuid())
+  homeId    String
+  awayId    String
+  winner    String
+  homeScore Int
+  awayScore Int
+  fixtures  Fixtures[]
+}
+
+// Fixture Model
+model Fixtures {
+  id             String       @id @default(uuid())
+  homeTeam       HomeTeamType @relation(fields: [homeFixtureId], references: [id])
+  awayTeam       AwayTeamType @relation(fields: [awayFixtureId], references: [id])
+  results        Results      @relation(fields: [resultsId], references: [id])
+  resultsId      String
+  homeFixtureId String
+  awayFixtureId String
+  date           DateTime
 }

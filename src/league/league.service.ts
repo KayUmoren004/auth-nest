@@ -122,8 +122,13 @@ export class LeagueService {
     return await this.prisma.league.findUnique({
       where: { id: leagueId },
       include: {
-        teams: true,
+        sport: true,
         settings: true,
+        teams: {
+          include: {
+            captain: true,
+          },
+        },
       },
     });
   }

@@ -40,28 +40,23 @@ export class CreateLeagueDto {
 }
 
 export class UpdateLeagueDto {
-  @ApiProperty()
   @IsString()
   id: string;
 
-  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   division: string;
 
-  @ApiProperty()
   @IsDate()
   @Transform(({ value }) => new Date(value))
   @IsNotEmpty()
   // @MinDate(new Date())
   startDate: Date;
 
-  @ApiProperty()
   @IsDate()
   @Transform(({ value }) => new Date(value))
   @IsNotEmpty()

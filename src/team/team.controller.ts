@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -19,10 +20,12 @@ import {
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { TeamService } from './team.service';
 import { CreateTeamDto, GetTeamResponse, UpdateTeamDto } from './dto/team.dto';
+import { TransformInterceptor } from 'src/interceptor';
 
 @ApiTags('Team')
 @Controller('team')
 @ApiBearerAuth()
+@UseInterceptors(TransformInterceptor)
 export class TeamController {
   // Constructor
   constructor(private teamService: TeamService) {}
