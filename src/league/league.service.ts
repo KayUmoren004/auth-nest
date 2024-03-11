@@ -129,6 +129,11 @@ export class LeagueService {
             captain: true,
           },
         },
+        soccerTable: {
+          include: {
+            team: true,
+          },
+        },
       },
     });
   }

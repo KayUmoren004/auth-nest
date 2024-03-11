@@ -63,6 +63,7 @@ export type Team = {
   league: League;
   fixtures: Fixture[]; // List of fixtures associated with the team
   // fixturesIds: string[]; // List of fixture IDs associated with the team
+  shortName?: string;
 };
 
 export type Player = {
@@ -91,26 +92,6 @@ export type Game = {
   fixture: Fixture;
 };
 
-type TeamType = {
-  logo?: string;
-  name: string;
-  teamId: string;
-  type: 'home' | 'away';
-};
-
-// export type Fixture = {
-//   id: string;
-//   homeTeam: TeamType;
-//   awayTeam: TeamType;
-//   date: string;
-//   time: string;
-//   fixtureId?: string;
-//   result?: {
-//     homeScore: number;
-//     awayScore: number;
-//     winner: 'Home' | 'Away' | 'Draw';
-//   };
-// };
 export type HomeTeamType = {
   id: string;
   logo: string;

@@ -30,6 +30,11 @@ export class CreateTeamDto {
   @IsString()
   @Optional()
   logoUrl: string;
+
+  @ApiProperty()
+  @IsString()
+  @Optional()
+  shortName: string;
 }
 
 export class UpdateTeamDto {

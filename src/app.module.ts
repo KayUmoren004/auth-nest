@@ -13,6 +13,7 @@ import { SportModule } from './sport/sport.module';
 import { GameModule } from './game/game.module';
 import { TeamModule } from './team/team.module';
 import { FixtureModule } from './fixture/fixture.module';
+import { StandingsModule } from './standings/standings.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { FixtureModule } from './fixture/fixture.module';
     GameModule,
     TeamModule,
     FixtureModule,
+    StandingsModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, SchoolService],

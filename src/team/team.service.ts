@@ -1,10 +1,14 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateTeamDto, UpdateTeamDto } from './dto/team.dto';
+import { StandingsService } from 'src/standings/standings.service';
 
 @Injectable()
 export class TeamService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private standings: StandingsService,
+  ) {}
 
   // Exclude item from array or object
   exclude = (fieldToRemove, data, noOfElements) => {
@@ -48,11 +52,6 @@ export class TeamService {
       include: {
         settings: true,
         teams: true,
-        // sport: {
-        //   include: {
-        //     settings: true,
-        //   },
-        // },
       },
     });
 
@@ -89,6 +88,9 @@ export class TeamService {
     const newTeam = await this.prisma.team.create({
       data: dto,
     });
+
+    // Update the league table
+    this.standings.setupLeagueTable(dto.leagueId);
 
     // Return the team
     return newTeam;
