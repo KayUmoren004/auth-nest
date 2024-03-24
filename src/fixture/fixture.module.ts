@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { GameService } from 'src/game/game.service';
 import { TeamService } from 'src/team/team.service';
 import { StandingsService } from 'src/standings/standings.service';
+import { PlayerService } from 'src/player/player.service';
 
 @Module({
   providers: [
@@ -15,6 +16,7 @@ import { StandingsService } from 'src/standings/standings.service';
     GameService,
     TeamService,
     StandingsService,
+    PlayerService,
   ],
   controllers: [FixtureController],
 })

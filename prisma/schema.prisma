@@ -85,7 +85,6 @@ model User {
   name       String
   email      String   @unique
   password   String
-  // role       Role     @default(USER)
   role       String   @default("USER")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -96,6 +95,8 @@ model User {
   player     Player[]
   signUpDate DateTime @default(now())
   captain    Team[]
+  blurhash   String?
+  avatarUrl  String?
 }
 
 // Profile Model
@@ -197,7 +198,7 @@ model TeamSettings {
 model Player {
   id           String @id @default(uuid())
   teamId       String
-  Team         Team   @relation(fields: [teamId], references: [id])
+  team         Team   @relation(fields: [teamId], references: [id])
   userId       String
   user         User   @relation(fields: [userId], references: [id])
   position     String
@@ -213,7 +214,7 @@ model Game {
   teamId   String?
   teams    Team[]
   settings GameSettings[]
-  leagueId String        @unique
+  leagueId String        
   league   League        @relation(fields: [leagueId], references: [id])
   fixture  Fixtures?
 }

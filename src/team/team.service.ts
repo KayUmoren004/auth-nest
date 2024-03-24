@@ -2,12 +2,14 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateTeamDto, UpdateTeamDto } from './dto/team.dto';
 import { StandingsService } from 'src/standings/standings.service';
+import { PlayerService } from 'src/player/player.service';
 
 @Injectable()
 export class TeamService {
   constructor(
     private prisma: PrismaService,
     private standings: StandingsService,
+    private player: PlayerService,
   ) {}
 
   // Exclude item from array or object
@@ -84,9 +86,23 @@ export class TeamService {
 
     if (captainTeam) throw new ConflictException('Captain already has a team');
 
+    // Create a new player for the captain
+    const captainPlayer = await this.player.createPlayer({
+      userId: dto.captainId,
+      teamId: team.id,
+      position: dto.position,
+      jerseyNumber: dto.jerseyNumber,
+    });
+
     // Create the team
     const newTeam = await this.prisma.team.create({
-      data: dto,
+      data: {
+        league: { connect: { id: dto.leagueId } },
+        name: dto.name,
+        captain: { connect: { id: dto.captainId } },
+        logoUrl: dto.logoUrl,
+        shortName: dto.shortName,
+      },
     });
 
     // Update the league table
@@ -217,8 +233,16 @@ export class TeamService {
     return await this.prisma.team.findUnique({
       where: { id: teamId },
       include: {
-        players: true,
-        games: true,
+        players: {
+          include: {
+            user: true,
+          },
+        },
+        games: {
+          include: {
+            fixture: true,
+          },
+        },
         league: true,
         captain: true,
       },
