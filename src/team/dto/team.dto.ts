@@ -35,6 +35,14 @@ export class CreateTeamDto {
   @IsString()
   @Optional()
   shortName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  position: string;
+
+  @IsString()
+  @IsNotEmpty()
+  jerseyNumber: number;
 }
 
 export class UpdateTeamDto {

@@ -71,4 +71,15 @@ export class FixtureController {
   async getFixturesByLeagueId(@Param('leagueId') leagueId: string) {
     return await this.fixtureService.getAllFixturesInLeague(leagueId);
   }
+
+  // Get all fixtures for a team in a league Endpoint - GET /league/{leagueId}/team/{teamId}
+  @UseGuards(JwtGuard)
+  @Get('/league/:leagueId/team/:teamId')
+  @ApiOkResponse()
+  async getFixturesByTeamId(
+    @Param('leagueId') leagueId: string,
+    @Param('teamId') teamId: string,
+  ) {
+    return await this.fixtureService.getAllFixturesForTeam(teamId, leagueId);
+  }
 }

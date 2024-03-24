@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateFixtureDto, EditFixtureResultsDto } from './dto/fixture.dto';
 import { GameService } from 'src/game/game.service';
@@ -56,8 +56,8 @@ export class FixtureService {
 
     // Create Game DTO
     const gameDto: CreateGameDto = {
-      homeId: homeTeam.id,
-      awayId: awayTeam.id,
+      homeId: dto.homeId,
+      awayId: dto.awayId,
       leagueId: dto.leagueId,
     };
 
@@ -199,6 +199,48 @@ export class FixtureService {
     });
 
     // Return the fixtures
+    return fixtures;
+  }
+
+  // Get all fixtures for a team
+  async getAllFixturesForTeam(teamId: string, leagueId: string) {
+    const league = await this.prisma.league.findUnique({
+      where: { id: leagueId },
+    });
+
+    if (!league) throw new ConflictException('League does not exist');
+
+    const fixtures = await this.prisma.fixtures.findMany({
+      where: {
+        leagueId,
+        OR: [
+          {
+            homeTeam: {
+              homeTeamId: teamId,
+            },
+          },
+          {
+            awayTeam: {
+              awayTeamId: teamId,
+            },
+          },
+        ],
+      },
+      include: {
+        homeTeam: {
+          include: {
+            team: true,
+          },
+        },
+        awayTeam: {
+          include: {
+            team: true,
+          },
+        },
+        result: true,
+      },
+    });
+
     return fixtures;
   }
 }

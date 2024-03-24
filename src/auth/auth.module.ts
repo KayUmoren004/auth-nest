@@ -5,6 +5,7 @@ import { UserService } from 'src/user/user.service';
 import { PrismaService } from 'src/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { SchoolService } from 'src/school/school.service';
+import { SupabaseService } from 'src/supabase/supabase.service';
 
 @Module({
   controllers: [AuthController],
@@ -14,6 +15,7 @@ import { SchoolService } from 'src/school/school.service';
     PrismaService,
     JwtService,
     SchoolService,
+    SupabaseService,
   ],
 })
 export class AuthModule {}

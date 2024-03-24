@@ -197,5 +197,7 @@ export type User = {
   lastLogin: Date;
   schoolId: string;
   schoolDomain: string;
+  avatarUrl: string;
+  blurhash: string;
   [key: string]: any;
 };

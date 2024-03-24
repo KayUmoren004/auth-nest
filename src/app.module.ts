@@ -14,6 +14,9 @@ import { GameModule } from './game/game.module';
 import { TeamModule } from './team/team.module';
 import { FixtureModule } from './fixture/fixture.module';
 import { StandingsModule } from './standings/standings.module';
+import { PhotoModule } from './photo/photo.module';
+import { SupabaseModule } from './supabase/supabase.module';
+import { PlayerModule } from './player/player.module';
 
 @Module({
   imports: [
@@ -27,6 +30,9 @@ import { StandingsModule } from './standings/standings.module';
     TeamModule,
     FixtureModule,
     StandingsModule,
+    PhotoModule,
+    SupabaseModule,
+    PlayerModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, SchoolService],

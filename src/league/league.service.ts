@@ -132,6 +132,7 @@ export class LeagueService {
         soccerTable: {
           include: {
             team: true,
+            league: true,
           },
         },
       },

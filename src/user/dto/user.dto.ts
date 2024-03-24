@@ -22,3 +22,12 @@ export class CreateUserDto {
   @IsString()
   schoolDomain: string;
 }
+
+export class UpdateUserPhotoDto {
+  @ApiProperty()
+  @IsString()
+  userId: string;
+
+  @ApiProperty()
+  photo: FormData;
+}

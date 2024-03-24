@@ -1,14 +1,20 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
   Param,
+  Post,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiTags } from '@nestjs/swagger';
+import { UpdateUserPhotoDto } from './dto/user.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('User')
 @Controller('user')
@@ -25,5 +31,19 @@ export class UserController {
     if (!user) throw new BadRequestException('User not found');
 
     return user;
+  }
+
+  // Post User Profile Photo Endpoint - POST /user/:id/photo
+  @UseGuards(JwtGuard)
+  @Post(':id/photo')
+  @UseInterceptors(FileInterceptor('photo'))
+  @ApiBadRequestResponse({
+    description: 'Image too large OR Invalid image type',
+  })
+  async postUserProfilePhoto(
+    @UploadedFile() dto: Express.Multer.File,
+    @Param('id') id: string,
+  ) {
+    return await this.userService.handlePhotoUpload(id, dto);
   }
 }
