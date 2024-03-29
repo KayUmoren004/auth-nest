@@ -79,7 +79,12 @@ export class GameService {
       include: {
         teams: true,
         league: true,
-        fixture: true,
+        fixture: {
+          include: {
+            homeTeam: true,
+            awayTeam: true,
+          },
+        },
       },
     });
 
