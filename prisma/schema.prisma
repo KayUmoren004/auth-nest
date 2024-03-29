@@ -211,7 +211,6 @@ model Game {
   id       String         @id @default(uuid())
   homeId   String
   awayId   String
-  teamId   String?
   teams    Team[]
   settings GameSettings[]
   leagueId String        

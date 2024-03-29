@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateLeagueDto, SettingDto, UpdateLeagueDto } from './dto/league.dto';
 
@@ -21,7 +25,7 @@ export class LeagueService {
       where: { id: dto.sportId },
     });
 
-    if (!sport) throw new ConflictException('Sport does not exist');
+    if (!sport) throw new NotFoundException('Sport does not exist');
 
     // Create the league
     const newLeague = await this.prisma.league.create({

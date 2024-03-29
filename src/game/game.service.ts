@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateGameDto } from './dto/game.dto';
 
@@ -66,6 +66,24 @@ export class GameService {
         },
       },
     });
+
+    // Return the game
+    return game;
+  }
+
+  // Get a game by ID
+  async findGameById(gameId: string) {
+    // Find the game by ID
+    const game = await this.prisma.game.findUnique({
+      where: { id: gameId },
+      include: {
+        teams: true,
+        league: true,
+        fixture: true,
+      },
+    });
+
+    if (!game) throw new NotFoundException('Game does not exist');
 
     // Return the game
     return game;
