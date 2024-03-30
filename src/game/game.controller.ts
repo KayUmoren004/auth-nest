@@ -2,8 +2,9 @@ import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GameService } from './game.service';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
+//prod.liveshare.vsengsaas.visualstudio.com/join?94463C711149EBA6353C4E45E5D7E9F6CC1A
 
-@ApiTags('Game')
+https: @ApiTags('Game')
 @Controller('game')
 @ApiBearerAuth()
 export class GameController {
