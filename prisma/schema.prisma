@@ -137,19 +137,19 @@ model SportSettings {
 
 // League Model
 model League {
-  id        String           @id @default(uuid())
-  sportId   String
-  sport     Sport?           @relation(fields: [sportId], references: [id])
-  name      String           @unique
-  division  String
-  startDate DateTime
-  endDate   DateTime
-  teams     Team[]
-  settings  LeagueSettings[]
-  fixtures  Fixtures[]
-  standings    Standings[]
-  games     Game[]
-  soccerTable  SoccerTable[]
+  id          String           @id @default(uuid())
+  sportId     String
+  sport       Sport?           @relation(fields: [sportId], references: [id])
+  name        String           @unique
+  division    String
+  startDate   DateTime
+  endDate     DateTime
+  teams       Team[]
+  settings    LeagueSettings[]
+  fixtures    Fixtures[]
+  standings   Standings[]
+  games       Game[]
+  soccerTable SoccerTable[]
 }
 
 // league settings model
@@ -164,16 +164,16 @@ model LeagueSettings {
 
 // Team Model
 model Team {
-  id           String         @id @default(uuid())
+  id           String           @id @default(uuid())
   leagueId     String?
-  league       League?        @relation(fields: [leagueId], references: [id])
-  name         String         @unique
+  league       League?          @relation(fields: [leagueId], references: [id])
+  name         String           @unique
   captainId    String?
-  captain      User?          @relation(fields: [captainId], references: [id])
+  captain      User?            @relation(fields: [captainId], references: [id])
   logoUrl      String
-  wins         Int?           @default(0)
-  losses       Int?           @default(0)
-  ties         Int?           @default(0)
+  wins         Int?             @default(0)
+  losses       Int?             @default(0)
+  ties         Int?             @default(0)
   players      Player[]
   games        Game[]
   settings     TeamSettings[]
@@ -182,6 +182,7 @@ model Team {
   shortName    String?
   standings    Standings[]
   soccerTable  SoccerTable[]
+  attendance   GameAttendance[]
 }
 
 // Team Settings Model
@@ -196,26 +197,40 @@ model TeamSettings {
 
 // Player Model
 model Player {
-  id           String @id @default(uuid())
+  id           String           @id @default(uuid())
   teamId       String
-  team         Team   @relation(fields: [teamId], references: [id])
+  team         Team             @relation(fields: [teamId], references: [id])
   userId       String
-  user         User   @relation(fields: [userId], references: [id])
+  user         User             @relation(fields: [userId], references: [id])
   position     String
   jerseyNumber Int
-  //Stats
+  attendance   GameAttendance[]
 }
 
 // Game Model
 model Game {
-  id       String         @id @default(uuid())
-  homeId   String
-  awayId   String
-  teams    Team[]
-  settings GameSettings[]
-  leagueId String        
-  league   League        @relation(fields: [leagueId], references: [id])
-  fixture  Fixtures?
+  id               String          @id @default(uuid())
+  homeId           String
+  awayId           String
+  teams            Team[]
+  settings         GameSettings[]
+  leagueId         String
+  league           League          @relation(fields: [leagueId], references: [id])
+  fixture          Fixtures?
+  roster           Json?
+  attendance       GameAttendance[]
+}
+
+// Game Attendance Model
+model GameAttendance {
+  id       String  @id @default(uuid())
+  gameId   String
+  teamId   String
+  team     Team    @relation(fields: [teamId], references: [id])
+  playerId String
+  player   Player  @relation(fields: [playerId], references: [id])
+  attended Boolean
+  game     Game[]
 }
 
 // Game Settings Model
@@ -251,29 +266,29 @@ model AwayTeamType {
 
 // Result Model
 model Results {
-  id        String     @id @default(uuid())
+  id        String   @id @default(uuid())
   homeId    String
   awayId    String
   winner    String
   homeScore Int
   awayScore Int
-  fixtures  Fixtures  @relation(fields: [fixtureId], references: [id])
-  fixtureId String    @unique
+  fixtures  Fixtures @relation(fields: [fixtureId], references: [id])
+  fixtureId String   @unique
 }
 
 // Fixture Model
 model Fixtures {
-  id           String       @id @default(uuid())
-  homeTeam     HomeTeamType @relation(fields: [homeFixtureId], references: [id])
-  awayTeam     AwayTeamType @relation(fields: [awayFixtureId], references: [id])
-  result       Results?    
+  id            String       @id @default(uuid())
+  homeTeam      HomeTeamType @relation(fields: [homeFixtureId], references: [id])
+  awayTeam      AwayTeamType @relation(fields: [awayFixtureId], references: [id])
+  result        Results?
   homeFixtureId String
   awayFixtureId String
   date          DateTime
   leagueId      String
   league        League       @relation(fields: [leagueId], references: [id])
-  gameId        String      @unique
-  game          Game        @relation(fields: [gameId], references: [id])
+  gameId        String       @unique
+  game          Game         @relation(fields: [gameId], references: [id])
 }
 
 model Standings {
@@ -299,7 +314,7 @@ model SoccerTable {
   position       Int
   teamId         String @unique
   team           Team   @relation(fields: [teamId], references: [id])
-  leagueId       String 
+  leagueId       String
   league         League @relation(fields: [leagueId], references: [id])
 }
 
@@ -311,15 +326,4 @@ model VolleyballTable {
   loss     Int
   points   Int
   position Int
-}
-
-model BasketballTable {
-  id            String @id @default(uuid())
-  played        Int
-  wins          Int
-  draws         Int
-  loss          Int
-  points        Int
-  position      Int
-  winPercentage Float
 }

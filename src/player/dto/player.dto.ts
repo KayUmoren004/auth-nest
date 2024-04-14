@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreatePlayerDto {
@@ -15,5 +16,5 @@ export class CreatePlayerDto {
 
   @IsString()
   @IsNotEmpty()
-  jerseyNumber: number;
+  jerseyNumber: string;
 }

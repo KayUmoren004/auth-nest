@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiCreatedResponse,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiTags,
@@ -21,6 +22,7 @@ import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { TeamService } from './team.service';
 import { CreateTeamDto, GetTeamResponse, UpdateTeamDto } from './dto/team.dto';
 import { TransformInterceptor } from 'src/interceptor';
+import { CreatePlayerDto } from 'src/player/dto/player.dto';
 
 @ApiTags('Team')
 @Controller('team')
@@ -33,11 +35,21 @@ export class TeamController {
   // Create Team Endpoint - POST /create
   @UseGuards(JwtGuard)
   @Post('/create')
-  @ApiOkResponse({
+  @ApiCreatedResponse({
     type: GetTeamResponse,
   })
   async createTeam(@Body() dto: CreateTeamDto) {
     return await this.teamService.createTeam(dto);
+  }
+
+  // Add Player to Team Endpoint - POST /add-player
+  @UseGuards(JwtGuard)
+  @Post('/add-player')
+  // @ApiOkResponse({
+  //   type: GetTeamResponse,
+  // })
+  async addPlayerToTeam(@Body() dto: CreatePlayerDto) {
+    return await this.teamService.addPlayer(dto);
   }
 
   // Get all teams with league id Endpoint - Get /{leagueId}

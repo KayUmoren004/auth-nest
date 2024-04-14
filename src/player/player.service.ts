@@ -13,7 +13,7 @@ export class PlayerService {
         user: { connect: { id: dto.userId } },
         team: { connect: { id: dto.teamId } },
         position: dto.position,
-        jerseyNumber: dto.jerseyNumber,
+        jerseyNumber: parseInt(dto.jerseyNumber),
       },
     });
   }

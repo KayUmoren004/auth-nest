@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma.service';
 import { CreateTeamDto, UpdateTeamDto } from './dto/team.dto';
 import { StandingsService } from 'src/standings/standings.service';
 import { PlayerService } from 'src/player/player.service';
+import { CreatePlayerDto } from 'src/player/dto/player.dto';
 
 @Injectable()
 export class TeamService {
@@ -86,14 +87,6 @@ export class TeamService {
 
     if (captainTeam) throw new ConflictException('Captain already has a team');
 
-    // Create a new player for the captain
-    const captainPlayer = await this.player.createPlayer({
-      userId: dto.captainId,
-      teamId: team.id,
-      position: dto.position,
-      jerseyNumber: dto.jerseyNumber,
-    });
-
     // Create the team
     const newTeam = await this.prisma.team.create({
       data: {
@@ -103,6 +96,14 @@ export class TeamService {
         logoUrl: dto.logoUrl,
         shortName: dto.shortName,
       },
+    });
+
+    // Create a new player for the captain
+    const captainPlayer = await this.player.createPlayer({
+      userId: dto.captainId,
+      teamId: newTeam.id,
+      position: dto.position,
+      jerseyNumber: dto.jerseyNumber,
     });
 
     // Update the league table
@@ -247,5 +248,24 @@ export class TeamService {
         captain: true,
       },
     });
+  }
+
+  // Return all players in a team given a team id
+  async findPlayers(teamId: string) {
+    return await this.prisma.player.findMany({
+      where: { teamId },
+      include: {
+        user: true,
+      },
+    });
+  }
+
+  // Add a player to a team given a team id and user id
+  async addPlayer(dto: CreatePlayerDto) {
+    // Create Player dto
+    const player = await this.player.createPlayer(dto);
+
+    // Return the player
+    return player;
   }
 }

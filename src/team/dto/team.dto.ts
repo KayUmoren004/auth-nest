@@ -42,7 +42,7 @@ export class CreateTeamDto {
 
   @IsString()
   @IsNotEmpty()
-  jerseyNumber: number;
+  jerseyNumber: string;
 }
 
 export class UpdateTeamDto {

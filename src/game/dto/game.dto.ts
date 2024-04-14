@@ -16,3 +16,17 @@ export class CreateGameDto {
   awayId: string;
   leagueId: string;
 }
+
+type GameAttendance = {
+  teamId: string;
+  players: string[];
+};
+
+export class GameAttendanceDto {
+  @IsString()
+  @IsNotEmpty()
+  gameId: string;
+
+  @IsNotEmpty()
+  attendance: GameAttendance[];
+}
