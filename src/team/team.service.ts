@@ -268,4 +268,47 @@ export class TeamService {
     // Return the player
     return player;
   }
+
+  // Join A team given a team id and user id
+  async joinTeam(teamId: string, userId: string) {
+    // Check if team exists
+    const team = await this.prisma.team.findUnique({
+      where: { id: teamId },
+    });
+
+    // If team does not exist, throw an error
+    if (!team) throw new ConflictException('Team does not exist');
+
+    // Check if user exists
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    // If user does not exist, throw an error
+    if (!user) throw new ConflictException('User does not exist');
+
+    // Check if user is already in team
+    let player = await this.prisma.player.findFirst({
+      where: { userId, teamId },
+    });
+
+    // If user is already in team, throw an error
+    if (player) throw new ConflictException('User is already in team');
+
+    // If no player exists, create a new player
+    if (!player) {
+      const dto = {
+        userId,
+        teamId,
+        position: 'Forward',
+        jerseyNumber: '0',
+      };
+
+      // Create a new player
+      player = await this.player.createPlayer(dto);
+    }
+
+    // Return the player
+    return player;
+  }
 }
