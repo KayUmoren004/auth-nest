@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsObject, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty()
@@ -21,6 +21,10 @@ export class CreateUserDto {
   @ApiProperty()
   @IsString()
   schoolDomain: string;
+
+  @ApiProperty()
+  @IsObject()
+  profilePhoto?: any;
 }
 
 export class UpdateUserPhotoDto {

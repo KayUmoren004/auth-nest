@@ -46,4 +46,18 @@ export class UserController {
   ) {
     return await this.userService.handlePhotoUpload(id, dto);
   }
+
+  // Post User Profile Photo Endpoint - POST /user/:email/photo
+  @Post('/photo/:email')
+  @UseInterceptors(FileInterceptor('photo'))
+  @ApiBadRequestResponse({
+    description: 'Image too large OR Invalid image type',
+  })
+  async postUserProfilePhotoEmail(
+    @UploadedFile() dto: Express.Multer.File,
+    @Param('email') email: string,
+  ) {
+    console.log('Running: ', email, dto);
+    return await this.userService.handlePhotoUploadByEmail(email, dto);
+  }
 }

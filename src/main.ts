@@ -3,7 +3,11 @@ import { AppModule } from './app.module';
 import { ImATeapotException, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
-const whitelist = ['http://localhost:3000', 'http://localhost:8000'];
+const whitelist = [
+  'http://localhost:3000',
+  'http://localhost:8000',
+  'http://172.20.*.*',
+];
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -33,7 +37,7 @@ async function bootstrap() {
     .setTitle('Intramural API')
     .setDescription('Backend server for intramural app')
     .setVersion('1.0')
-    .addServer('http://localhost:8000/', 'Local environment')
+    .addServer('http://172.21.150.46:8000/', 'Local environment')
     .setExternalDoc('Postman Collection', '/api-json')
     .addBearerAuth()
     .addTag('Your API Tag')
