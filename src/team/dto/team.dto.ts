@@ -155,3 +155,25 @@ export class GetTeamResponse {
   })
   league: League;
 }
+
+export class JoinTeamDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  teamId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  position: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  jerseyNumber: string;
+}

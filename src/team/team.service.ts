@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { CreateTeamDto, UpdateTeamDto } from './dto/team.dto';
+import { CreateTeamDto, JoinTeamDto, UpdateTeamDto } from './dto/team.dto';
 import { StandingsService } from 'src/standings/standings.service';
 import { PlayerService } from 'src/player/player.service';
 import { CreatePlayerDto } from 'src/player/dto/player.dto';
@@ -270,7 +270,8 @@ export class TeamService {
   }
 
   // Join A team given a team id and user id
-  async joinTeam(teamId: string, userId: string) {
+  async joinTeam(teamId: string, userId: string, dto: JoinTeamDto) {
+    const { position, jerseyNumber } = dto;
     // Check if team exists
     const team = await this.prisma.team.findUnique({
       where: { id: teamId },
@@ -300,8 +301,8 @@ export class TeamService {
       const dto = {
         userId,
         teamId,
-        position: 'Forward',
-        jerseyNumber: '0',
+        position,
+        jerseyNumber,
       };
 
       // Create a new player

@@ -20,7 +20,12 @@ import {
 } from '@nestjs/swagger';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { TeamService } from './team.service';
-import { CreateTeamDto, GetTeamResponse, UpdateTeamDto } from './dto/team.dto';
+import {
+  CreateTeamDto,
+  GetTeamResponse,
+  JoinTeamDto,
+  UpdateTeamDto,
+} from './dto/team.dto';
 import { TransformInterceptor } from 'src/interceptor';
 import { CreatePlayerDto } from 'src/player/dto/player.dto';
 
@@ -113,7 +118,8 @@ export class TeamController {
     @Param('leagueId') leagueId: string,
     @Param('teamId') teamId: string,
     @Param('userId') userId: string,
+    @Body() dto: JoinTeamDto,
   ) {
-    await this.teamService.joinTeam(teamId, userId);
+    await this.teamService.joinTeam(teamId, userId, dto);
   }
 }
