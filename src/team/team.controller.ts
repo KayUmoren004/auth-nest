@@ -105,4 +105,15 @@ export class TeamController {
   ) {
     await this.teamService.updateTeam(teamId, leagueId, dto);
   }
+
+  // Join team with league id and team id Endpoint - Post /join/{leagueId}/{teamId}/{userId}
+  @UseGuards(JwtGuard)
+  @Post('/join/:leagueId/:teamId/:userId')
+  async joinTeam(
+    @Param('leagueId') leagueId: string,
+    @Param('teamId') teamId: string,
+    @Param('userId') userId: string,
+  ) {
+    await this.teamService.joinTeam(teamId, userId);
+  }
 }
